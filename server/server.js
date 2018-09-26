@@ -8,6 +8,7 @@ const _ = require('lodash');
 var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/todo.js');
 var {User} = require('./models/user.js');
+var {authenticate} = require('./middleware/authenticate')
 
 var app = express();
 const port = process.env.PORT;
@@ -97,6 +98,8 @@ app.patch('/todos/:id', (req, res) => {
     body.completedAt = null;
   }
 
+
+
   Todo.findByIdAndUpdate(id, {$set:body}, {new: true}).then((todo) => {
     if(!todo){
       return res.status(404).send();
@@ -107,6 +110,13 @@ app.patch('/todos/:id', (req, res) => {
     res.status(400).send();
   });
 });
+
+
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+});
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}` );
 });
