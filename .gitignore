@@ -2,3 +2,4 @@ node_modules/
 .tern-project
 package-lock.json
 .jshintrc
+server/config/config.json
